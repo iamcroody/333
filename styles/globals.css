@@ -27,3 +27,53 @@ body {
   padding: 0;
 }
 
+/* Hacker Mode Overrides */
+.hacker-theme, .hacker-theme body, .hacker-theme div {
+  --tw-gradient-from: #000000 !important;
+  --tw-gradient-to: #001100 !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+.hacker-theme * {
+  color: #00ff00 !important;
+  border-color: #00ff00 !important;
+  text-shadow: 0 0 5px #00ff00 !important;
+}
+
+.hacker-theme .bg-purple-900\/20, 
+.hacker-theme .bg-purple-900\/30,
+.hacker-theme .bg-purple-900\/40 {
+  background-color: rgba(0, 255, 0, 0.1) !important;
+}
+
+/* CRT Scanline Effect */
+.crt::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(18, 16, 16, 0) 50%,
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 4px;
+  z-index: 50;
+  pointer-events: none;
+}
+
+@keyframes flicker {
+  0% { opacity: 0.95; }
+  5% { opacity: 0.85; }
+  10% { opacity: 0.95; }
+  15% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+.crt {
+  animation: flicker 0.15s infinite;
+}
+

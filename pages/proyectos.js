@@ -6,11 +6,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { getAllProyectos, getProyectosByCategory, getProyectosByStatus, categorias, estados, searchProyectos } from "../data/proyectos";
 import { useGithubRepos } from "../hooks/useGithubRepos";
+import WasmTensorVisualizer from "../components/WasmTensorVisualizer";
 import "@fontsource/emblema-one";
 import "@fontsource/dosis";
 
 export default function Proyectos() {
-  const [currentTime, setCurrentTime] = useState(new Date());
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const [selectedStatus, setSelectedStatus] = useState("Todos");
@@ -20,13 +20,6 @@ export default function Proyectos() {
 
   // Hook para obtener repos de GitHub
   const { projectsFromGithub, loading: githubLoading, error: githubError, lastUpdated } = useGithubRepos();
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   useEffect(() => {
     // Combinar proyectos locales con repos de GitHub
@@ -93,10 +86,11 @@ export default function Proyectos() {
   };
 
   return (
-    <div className="min-h-screen text-white bg-gradient-to-b from-[#0c0115] via-black to-black pt-24 px-4 pb-16">
+    <div className="min-h-screen text-white bg-gradient-to-b from-[#0c0115] via-black to-black pt-24 px-4 pb-16 relative">
+      {selectedCategory === "Inteligencia Artificial" && <WasmTensorVisualizer />}
       <Menu333 />
 
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
         <motion.div
           className="text-center mb-12"
