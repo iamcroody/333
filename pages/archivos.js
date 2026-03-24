@@ -3,8 +3,6 @@ import Menu333 from "../components/Menu333";
 import NeonName from "../components/NeonName";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import "@fontsource/emblema-one";
-import "@fontsource/dosis";
 
 const ARCHIVE_DATA = [
   {
@@ -88,14 +86,6 @@ function Terminal({ onUnlock }) {
           ];
           setTimeout(() => onUnlock(), 1500);
           break;
-        case "cat labs/linux-kernel.txt":
-          response = [
-            "fs.file-max = 2097152",
-            "net.ipv4.tcp_syncookies = 1",
-            "net.ipv4.conf.all.rp_filter = 1",
-            "net.ipv4.conf.default.accept_source_route = 0"
-          ];
-          break;
         default:
           if (cmd.startsWith("cat ")) {
             response = [`cat: ${cmd.split(" ")[1]}: Permission denied o No such file`];
@@ -116,6 +106,18 @@ function Terminal({ onUnlock }) {
 
   return (
     <div className="w-full max-w-3xl mx-auto bg-black border border-purple-500/30 rounded-lg p-4 font-mono text-sm sm:text-base crt overflow-hidden relative shadow-[0_0_15px_rgba(147,51,234,0.2)]" style={{ height: "400px" }}>
+      <style jsx>{`
+        .crt::before {
+          content: " ";
+          display: block;
+          position: absolute;
+          top: 0; left: 0; bottom: 0; right: 0;
+          background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+          z-index: 2;
+          background-size: 100% 2px, 3px 100%;
+          pointer-events: none;
+        }
+      `}</style>
       <div className="absolute top-0 left-0 w-full h-6 bg-purple-900/40 flex items-center px-3 border-b border-purple-500/30">
         <div className="flex gap-2">
           <div className="w-3 h-3 rounded-full bg-red-500"></div>
@@ -155,20 +157,20 @@ export default function ArchiveroPage() {
   if (!isMounted) return <div className="min-h-screen bg-black" />;
 
   return (
-    <div className="min-h-screen bg-black text-white relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-[#05010a] text-white relative overflow-hidden font-sans">
       <Menu333 />
-      <div className="absolute top-4 left-4 z-50"><NeonName /></div>
+      <div className="absolute top-4 left-4 z-50"><NeonName centered={false} /></div>
 
-      <div className="pt-32 pb-20 px-6 max-w-5xl mx-auto relative z-10">
+      <div className="pt-32 pb-64 px-6 max-w-5xl mx-auto relative z-10">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <h1 className="text-purple-500 text-4xl md:text-6xl font-bold mb-4" style={{ fontFamily: "Emblema One, sans-serif" }}>
+          <h1 className="text-purple-500 text-4xl md:text-6xl font-bold mb-4 font-['Emblema_One'] tracking-widest">
             EL ARCHIVERO
           </h1>
-          <p className="text-purple-300/70 max-w-2xl mx-auto" style={{ fontFamily: "Dosis, sans-serif" }}>
+          <p className="text-purple-300/70 max-w-2xl mx-auto font-['Dosis']">
             Mi propio sistema de archivos cifrado para proteger mi propiedad intelectual. 
             Conocimiento bruto, notas de campo y fragmentos de realidad digital.
           </p>
@@ -192,10 +194,9 @@ export default function ArchiveroPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              {/* Enlace al easter egg del blockchain */}
               <div className="mb-8 text-right">
-                <a href="/blockchain/index.html" target="_blank" rel="noopener noreferrer" className="text-green-400 hover:text-green-300 font-mono text-xs crt animate-pulse">
-                  [!] ACCEDER_AL_SIMULADOR_BLOCKCHAIN_NODE
+                <a href="https://croody.org/secretgift4you" target="_blank" rel="noopener noreferrer" className="text-green-400 hover:text-green-300 font-mono text-xs animate-pulse opacity-50 hover:opacity-100 transition-opacity">
+                  [!] ACCEDER_A_CROODY
                 </a>
               </div>
 
@@ -215,7 +216,7 @@ export default function ArchiveroPage() {
                     }`}
                   >
                     <div className="text-4xl mb-4">{cat.icon}</div>
-                    <h2 className="text-xl font-bold text-purple-200 mb-2" style={{ fontFamily: "Emblema One, sans-serif" }}>
+                    <h2 className="text-xl font-bold text-purple-200 mb-2 font-['Emblema_One']">
                       {cat.category}
                     </h2>
                     <p className="text-xs text-purple-400/60 uppercase tracking-widest">
@@ -240,7 +241,7 @@ export default function ArchiveroPage() {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: i * 0.05 }}
-                        className="bg-white/5 border border-white/10 p-5 rounded-xl hover:bg-white/10 transition-colors group"
+                        className="bg-purple-900/10 border border-purple-500/20 p-5 rounded-xl hover:bg-purple-900/30 transition-colors group"
                       >
                         <div className="flex justify-between items-start mb-2">
                           <h3 className="text-purple-100 font-bold group-hover:text-purple-400 transition-colors">
@@ -250,7 +251,7 @@ export default function ArchiveroPage() {
                             {item.type} • {item.date}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-400 leading-relaxed">
+                        <p className="text-sm text-purple-200/60 leading-relaxed font-light">
                           {item.description}
                         </p>
                       </motion.div>
@@ -263,9 +264,9 @@ export default function ArchiveroPage() {
         </AnimatePresence>
       </div>
 
-      <div className="fixed inset-0 pointer-events-none opacity-20">
+      <div className="fixed inset-0 pointer-events-none opacity-20 z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-900/20 blur-[120px] rounded-full" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-900/10 blur-[120px] rounded-full" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-900/10 blur-[120px] rounded-full" />
       </div>
     </div>
   );

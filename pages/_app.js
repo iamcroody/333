@@ -1,57 +1,29 @@
-// pages/_app.js
 import "../styles/globals.css";
-import React, { useEffect, useState } from "react";
-import { Howler } from "howler";
+import { AnimatePresence, motion } from "framer-motion";
+import { Inter, JetBrains_Mono } from "next/font/google";
+import Menu333 from "../components/Menu333";
 
-export default function MyApp({ Component, pageProps }) {
-  const [hackerMode, setHackerMode] = useState(false);
-  const [location, setLocation] = useState(null);
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
-  useEffect(() => {
-    // 1. Intelligent Localization
-    fetch("https://ipapi.co/json/")
-      .then(res => res.json())
-      .then(data => {
-        if (data.city && data.country_name) {
-          console.log(`%c[sys-info]: Uplink established. Greetings from ${data.city}, ${data.country_name}.`, "color: #a855f7; font-family: monospace;");
-          setLocation(data);
-        }
-      })
-      .catch(() => {});
-
-    // 2. DevTools Detection & Hacker Mode
-    const detectDevTools = () => {
-      const threshold = 160;
-      const widthDiff = window.outerWidth - window.innerWidth > threshold;
-      const heightDiff = window.outerHeight - window.innerHeight > threshold;
-      if (widthDiff || heightDiff) {
-        if (!window.devtoolsDetected) {
-          window.devtoolsDetected = true;
-          console.log("%c[iamcroody-os]: Detecting intrusion... Access granted to kernel debug mode.", "color: #00FF00; font-weight: bold; font-size: 14px; font-family: monospace;");
-          setHackerMode(true);
-        }
-      } else {
-        window.devtoolsDetected = false;
-        setHackerMode(false);
-      }
-    };
-
-    window.addEventListener('resize', detectDevTools);
-    detectDevTools();
-
-    return () => {
-      window.removeEventListener('resize', detectDevTools);
-    };
-  }, []);
-
+export default function MyApp({ Component, pageProps, router }) {
   return (
-    <div className={hackerMode ? "hacker-theme" : ""}>
-      {location && (
-        <div className="fixed bottom-2 right-2 text-[10px] text-purple-500/30 font-mono z-[9999] pointer-events-none">
-          SYS_NODE: {location.city?.toUpperCase()} // IP_TRACKING: DISABLED
-        </div>
-      )}
-      <Component {...pageProps} />
+    <div className={`${inter.variable} ${jetbrainsMono.variable} min-h-screen font-sans text-foreground bg-background relative overflow-hidden`}>
+      
+      {/* Fondo Global Cohesivo "Cyber-Luxe" */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-[50vw] h-[50vh] bg-purple-900/10 blur-[150px] rounded-full" />
+        <div className="absolute bottom-0 right-1/4 w-[40vw] h-[40vh] bg-purple-600/5 blur-[120px] rounded-full" />
+        <div className="absolute inset-0 bg-[url('/textures/noise.png')] opacity-20 mix-blend-overlay" />
+      </div>
+
+      <Menu333 />
+
+      <div className="relative z-10">
+        <AnimatePresence mode="wait" initial={false}>
+          <Component {...pageProps} key={router.asPath} />
+        </AnimatePresence>
+      </div>
     </div>
   );
 }

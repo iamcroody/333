@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  background-color: #000;
+  color: #fff;
+}
+
+/* Custom Scrollbar for Webkit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505; 
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333; 
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+/* Luxury Gold Scrollbar variant class */
+.scrollbar-gold::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.scrollbar-gold::-webkit-scrollbar-thumb {
+  background: #806318; /* gold-700 */
+}
+
+.scrollbar-gold::-webkit-scrollbar-thumb:hover {
+  background: #D4A528; /* gold-500 */
+}

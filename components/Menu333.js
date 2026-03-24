@@ -2,145 +2,91 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import "@fontsource/teko";
-import "@fontsource/bebas-neue";
+import { usePathname } from "next/navigation";
+import { Howl } from "howler";
+
+const hoverSound = typeof window !== "undefined" ? new Howl({ 
+  src: ["/neon-on.mp3"], 
+  volume: 0.1,
+  sprite: {
+    short: [0, 700] // Reproduce desde el inicio hasta 0.7 segundos
+  }
+}) : null;
 
 export default function Menu333() {
-  const [open, setOpen] = useState(false);
-  const [vh, setVh] = useState(100);
+  const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
-    const esc = (e) => e.key === "Escape" && setOpen(false);
-    const handleResize = () => {
-      const realVh = window.innerHeight * 0.01;
-      setVh(realVh);
-    };
-    document.addEventListener("keydown", esc);
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => {
-      document.removeEventListener("keydown", esc);
-      window.removeEventListener("resize", handleResize);
-    };
+    setMounted(true);
   }, []);
 
-  const baseGlow =
-    "shadow-[0_0_6px_#a855f7,0_0_15px_#9333ea,0_0_30px_#6b21a8] transition-all duration-500";
-  const darkPurple = "#2e0854";
+  const playSound = () => {
+    hoverSound?.play("short");
+  };
 
-  const mainLinks = [
-    { name: "Inicio", href: "/" },
-    { name: "Sobre Mi", href: "/sobre-mi" },
-    { name: "Proyectos", href: "/proyectos" },
-    { name: "Blogs", href: "/blogs" },
-    { name: "Externos:", href: "#", external: false },
-    { name: "Galeria", href: "https://vsco.co/micuentaprincipal/gallery", external: true },
-    { name: "Libros", href: "https://www.goodreads.com/review/list/193980253-jose-jimenez", external: true },
+  const links = [
+    { name: "Home", href: "/", icon: "⌂" },
+    { name: "Work", href: "/proyectos", icon: "❖" },
+    { name: "Archive", href: "/archivos", icon: "✦" },
+    { name: "Time", href: "/reloj", icon: "⧖" },
+    { name: "Node", href: "/blockchain/index.html", icon: "☍", external: true },
   ];
 
-  const container = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.06,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: [0.25, 1, 0.5, 1] },
-    },
-    exit: { opacity: 0, y: 20, transition: { duration: 0.3 } },
-  };
+  if (!mounted) return null;
 
   return (
-    <>
-      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[100]">
-        <motion.div
-          initial={{ width: 88, borderRadius: "2rem" }}
-          animate={{
-            width: open ? Math.min(window.innerWidth * 0.9, 444) : 88,          
-            borderRadius: open ? "1.75rem" : "2rem",
-            backgroundColor: darkPurple,
-            scale: open ? 1.05 : 1,
-          }}
-          transition={{ duration: 0.5, ease: [0.65, -0.3, 0.35, 1.3] }}
-          className={`text-white text-center font-bold ${baseGlow} overflow-hidden cursor-pointer`}
-          onClick={() => setOpen(!open)}
-          whileHover={{ scale: 1.06 }}
-          style={{ fontFamily: "Bebas Neue, sans-serif" }}
-        >
-          <div className="py-1 text-lg tracking-widest">333</div>
-        </motion.div>
-      </div>
+    <div className="fixed bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-[100] w-full max-w-lg px-4 sm:px-0">
+      <motion.nav 
+        initial={{ y: 50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 260, damping: 20 }}
+        className="flex items-center justify-between bg-black/60 backdrop-blur-2xl border border-purple-500/20 p-2 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden"
+      >
+        <div className="absolute inset-0 bg-gradient-to-t from-purple-500/5 to-transparent pointer-events-none" />
+        
+        {links.map((link) => {
+          const isActive = pathname === link.href;
+          const content = (
+            <>
+              <span className={`text-xl sm:text-2xl mb-1 transition-all duration-300 ${isActive ? "text-purple-400 text-shadow-neon scale-110" : "text-purple-200/40 group-hover:text-purple-300"}`}>
+                {link.icon}
+              </span>
+              <span className={`text-[8px] sm:text-[10px] font-mono tracking-widest uppercase transition-colors duration-300 ${isActive ? "text-purple-300 font-bold" : "text-purple-200/30 group-hover:text-purple-200"}`}>
+                {link.name}
+              </span>
+              {isActive && (
+                <motion.div 
+                  layoutId="activeTab"
+                  className="absolute bottom-0 w-8 h-1 bg-purple-500 shadow-[0_0_12px_#a855f7] rounded-full"
+                />
+              )}
+            </>
+          );
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-black via-[#1e0033] to-black/90 backdrop-blur-[4px] px-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            style={{ fontFamily: "Teko, sans-serif" }}
-          >
-            <motion.div
-              className="flex flex-col items-center gap-5 pt-24 pb-16 w-full max-w-[92%] md:max-w-screen-sm mx-auto overflow-y-auto"
-              style={{
-                maxHeight: `${vh * 100 - 96}px`,
-                scrollbarWidth: "none",
-                msOverflowStyle: "none",
-                WebkitOverflowScrolling: "touch",
-              }}
-              variants={container}
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
+          return link.external ? (
+            <a
+              key={link.name}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              onMouseEnter={playSound}
+              className="relative flex-1 flex flex-col items-center justify-center py-2 group"
             >
-              {mainLinks.map(({ name, href, external }) => (
-                <motion.div key={name} variants={item} className="w-full">
-                  {external ? (
-                    <a
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => setOpen(false)}
-                      className="text-purple-200 hover:text-purple-400 transition-all duration-300 ease-in-out cursor-pointer block text-center text-[clamp(1.6rem,6.5vw,2.4rem)] px-4 tracking-wide"
-                      style={{
-                        textShadow: "0px 0px 4px #9333ea, 0px 0px 8px #9333ea",
-                      }}
-                    >
-                      {name} ↗
-                    </a>
-                  ) : (
-                    <Link href={href} legacyBehavior>
-                      <a
-                        onClick={() => setOpen(false)}
-                        className="text-purple-200 hover:text-purple-400 transition-all duration-300 ease-in-out cursor-pointer block text-center text-[clamp(1.6rem,6.5vw,2.4rem)] px-4 tracking-wide"
-                        style={{
-                          textShadow: "0px 0px 4px #9333ea, 0px 0px 8px #9333ea",
-                        }}
-                      >
-                        {name}
-                      </a>
-                    </Link>
-                  )}
-                </motion.div>
-              ))}
-              <style jsx>{`
-                div::-webkit-scrollbar {
-                  display: none;
-                }
-              `}</style>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+              {content}
+            </a>
+          ) : (
+            <Link 
+              key={link.name} 
+              href={link.href}
+              onMouseEnter={playSound}
+              className="relative flex-1 flex flex-col items-center justify-center py-2 group"
+            >
+              {content}
+            </Link>
+          );
+        })}
+      </motion.nav>
+    </div>
   );
 }

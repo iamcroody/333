@@ -30,7 +30,7 @@ export const SITE_CONFIG = {
       label: "LinkedIn"
     },
     github: {
-      url: "https://github.com/TheWomanizer",
+      url: "https://github.com/iamcroody",
       emoji: "🖥️",
       label: "GitHub"
     }
@@ -42,7 +42,7 @@ export const SITE_CONFIG = {
   pages: {
     home: {
       title: "Bienvenido",
-      subtitle: "Insgeniero de Sistemas | Desarrollador Full-Stack | Apasionado por la IA y Dios"
+      subtitle: "Ingeniero de Sistemas | Desarrollador Full-Stack | Apasionado por la IA y Dios"
     },
     about: {
       title: "MI NOMBRE ES",

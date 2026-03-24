@@ -1,79 +1,62 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #030005;
+  --foreground: #f5f5f5;
+  --accent: #9333ea;
+  --border: rgba(147, 51, 234, 0.2);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "Geist Mono", monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
   margin: 0;
   padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
-/* Hacker Mode Overrides */
-.hacker-theme, .hacker-theme body, .hacker-theme div {
-  --tw-gradient-from: #000000 !important;
-  --tw-gradient-to: #001100 !important;
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+::selection {
+  background-color: var(--accent);
+  color: #fff;
 }
 
-.hacker-theme * {
-  color: #00ff00 !important;
-  border-color: #00ff00 !important;
-  text-shadow: 0 0 5px #00ff00 !important;
+/* Scrollbar minimalista y cyberpunk */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(147, 51, 234, 0.3);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(147, 51, 234, 0.6);
 }
 
-.hacker-theme .bg-purple-900\/20, 
-.hacker-theme .bg-purple-900\/30,
-.hacker-theme .bg-purple-900\/40 {
-  background-color: rgba(0, 255, 0, 0.1) !important;
+.text-shadow-neon {
+  text-shadow: 0 0 10px rgba(147, 51, 234, 0.8), 0 0 20px rgba(147, 51, 234, 0.5);
 }
 
-/* CRT Scanline Effect */
-.crt::before {
+/* Efecto CRT muy sutil para terminales, no para toda la web */
+.crt-subtle::after {
   content: " ";
   display: block;
   position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(18, 16, 16, 0) 50%,
-    rgba(0, 0, 0, 0.25) 50%
-  );
-  background-size: 100% 4px;
-  z-index: 50;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 2;
+  background-size: 100% 2px, 3px 100%;
   pointer-events: none;
 }
-
-@keyframes flicker {
-  0% { opacity: 0.95; }
-  5% { opacity: 0.85; }
-  10% { opacity: 0.95; }
-  15% { opacity: 1; }
-  100% { opacity: 1; }
-}
-
-.crt {
-  animation: flicker 0.15s infinite;
-}
-

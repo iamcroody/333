@@ -1,5 +1,5 @@
 // hooks/useGithubRepos.js
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export const useGithubRepos = () => {
   const [repos, setRepos] = useState([]);
@@ -12,7 +12,7 @@ export const useGithubRepos = () => {
       setLoading(true);
       setError(null);
 
-      const users = ['ll333ll', 'TheWomanizer'];
+      const users = ['ll333ll', 'iamcroody'];
       const allRepos = [];
       const seenRepos = new Set();
 
@@ -265,7 +265,7 @@ export const useGithubRepos = () => {
   };
 
   // Convertir repos a formato de proyectos
-  const projectsFromGithub = repos.map(mapToProjectFormat);
+  const projectsFromGithub = React.useMemo(() => repos.map(mapToProjectFormat), [repos]);
 
   return {
     repos,

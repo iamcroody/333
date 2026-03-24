@@ -1,74 +1,47 @@
-"use client";
-import NeonName from "../components/NeonName";
-import Menu333 from "../components/Menu333";
-import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import "@fontsource/emblema-one";
+import NeonName from "../components/NeonName";
 
 export default function Home() {
-  const [interactions, setInteractions] = useState(0);
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [scrolled, setScrolled] = useState(false);
-  const nameWrapperRef = useRef(null);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.innerWidth >= 768) {
-        setScrolled(window.scrollY > 80);
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const handleInteraction = (e) => {
-    if (
-      e.target.tagName === "BUTTON" ||
-      e.target.tagName === "A" ||
-      e.target.onclick ||
-      e.target.role === "button"
-    ) {
-      setInteractions((prev) => prev + 1);
-    }
-  };
-
   return (
-    <div
-      className="min-h-screen flex flex-col items-center justify-center text-white relative bg-gradient-to-br from-black via-[#000000] to-[#0c0115]"
-      onClick={handleInteraction}
-    >
-      {/* Hora (clickeable) */}
-      <div
-        onClick={() => (window.location.href = "/reloj")}
-        className="absolute top-4 right-6 text-purple-400 text-xl sm:text-2xl font-bold cursor-pointer"
-        style={{ fontFamily: "Emblema One, sans-serif" }}
-        title="Ver modo reloj"
-      >
-        {currentTime.toLocaleTimeString("es-ES", { hour12: false })}
-      </div>
+    <div className="min-h-[100dvh] flex flex-col px-6 md:px-24 justify-center items-center relative overflow-hidden">
+      
+      <main className="z-10 flex flex-col items-center gap-8 w-full max-w-4xl mt-[-10vh]">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+          className="relative"
+        >
+          <NeonName centered={true} />
+          {/* Reflejo del neón sutil */}
+          <div className="absolute top-full left-0 w-full h-16 bg-gradient-to-b from-purple-500/10 to-transparent blur-2xl pointer-events-none" />
+        </motion.div>
+        
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center"
+        >
+          <h2 className="font-mono text-purple-200/80 text-xs md:text-sm tracking-[0.5em] uppercase font-light border-y border-purple-500/20 py-4 px-8 bg-purple-900/10 backdrop-blur-sm rounded-full">
+            Software Architect <span className="text-purple-500 mx-2">×</span> Digital Artisan
+          </h2>
+        </motion.div>
+      </main>
 
-      {/* Menú 333 */}
-      <Menu333 />
-
-      {/* Contenedor del nombre */}
-      <motion.div
-        ref={nameWrapperRef}
-        animate={{
-          scale: scrolled ? 0.6 : 1,
-          y: scrolled ? -60 : 0,
-        }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="z-40"
-      >
-        <NeonName />
-      </motion.div>
+      {/* Partículas flotantes sutiles */}
+      {[...Array(15)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-1 h-1 bg-purple-400/30 rounded-full pointer-events-none"
+          animate={{
+            x: [Math.random() * 100 + "vw", Math.random() * 100 + "vw"],
+            y: [Math.random() * 100 + "vh", Math.random() * 100 + "vh"],
+            opacity: [0, 0.5, 0]
+          }}
+          transition={{ duration: Math.random() * 20 + 20, repeat: Infinity, ease: "linear" }}
+        />
+      ))}
     </div>
   );
 }
