@@ -65,11 +65,13 @@ export default function NeonName({ centered = true }) {
               key={i}
               className="inline-block transition-all duration-300 group-hover:scale-110"
               animate={{
-                opacity: isGlitching ? 0.3 : isLit ? 1 : 0.15,
-                color: isLit ? "#d896ff" : "#222",
+                opacity: isGlitching ? 0.4 : isLit ? 1 : 0.1,
+                color: isLit ? "#e9d5ff" : "#222",
                 textShadow: isLit 
-                  ? "0 0 8px #a855f7, 0 0 16px #9333ea, 0 0 24px #6b21a8" 
-                  : "none"
+                  ? "0 0 5px #d896ff, 0 0 15px #a855f7, 0 0 25px #9333ea, 0 0 40px #7e22ce" 
+                  : "none",
+                x: isGlitching ? (i % 2 === 0 ? 3 : -3) : 0,
+                skewX: isGlitching ? (i % 2 === 0 ? 15 : -15) : 0
               }}
             >
               {char === " " ? "\u00A0" : char}

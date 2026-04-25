@@ -727,7 +727,7 @@ export default function App() {
                     </div>
                     <div>
                         <h1 className="font-luxury text-2xl tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-gold-200 via-gold-400 to-gold-200">
-                            BE RICH FAST
+                            CHAIN SIMULATOR
                         </h1>
                     </div>
                 </div>

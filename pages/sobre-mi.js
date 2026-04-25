@@ -15,9 +15,12 @@ export default function SobreMi() {
   return (
     <div className="min-h-screen bg-[#05010a] text-white flex flex-col items-center pt-24 sm:pt-32 px-4 pb-32">
       <Menu333 />
-      <div className="absolute top-4 left-4 z-50 hidden md:block">
+      <motion.div 
+        initial={{ opacity: 0 }} animate={{ opacity: 0.4 }} exit={{ opacity: 0 }}
+        className="absolute top-6 left-6 z-50 hidden md:block hover:opacity-100 transition-opacity"
+      >
         <NeonName centered={false} />
-      </div>
+      </motion.div>
 
       <main className="z-10 max-w-6xl w-full mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 sm:gap-20">
@@ -55,6 +58,20 @@ export default function SobreMi() {
                 </motion.div>
               ))}
             </div>
+
+            <div className="mt-8 flex flex-col gap-6">
+              <motion.div whileHover={{ x: 10 }}>
+                <a href="https://instagram.com/iamcroody" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 text-purple-400 hover:text-purple-200 transition-all font-['Bebas_Neue'] text-3xl tracking-widest">
+                  INSTAGRAM_FEED <span>→</span>
+                </a>
+              </motion.div>
+
+              <motion.div whileHover={{ x: 10 }}>
+                <a href="https://co.linkedin.com/in/josealejandrojimenez" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 text-purple-400 hover:text-purple-200 transition-all font-['Bebas_Neue'] text-3xl tracking-widest">
+                  LINKEDIN_NETWORK <span>→</span>
+                </a>
+              </motion.div>
+            </div>
           </motion.div>
 
           {/* Columna Derecha: Bio y Skills */}
@@ -73,32 +90,49 @@ export default function SobreMi() {
 
             <div className="space-y-6 text-lg sm:text-xl font-light text-purple-100/80 leading-relaxed font-['Dosis'] text-justify">
               <p>
-                Nacido en <span className="text-purple-400 font-bold">2005</span>, mi camino digital comenzó en la profundidad de la red a los 14 años. Lo que empezó como curiosidad radical en foros de seguridad se transformó en una vocación innegociable por la ingeniería de sistemas.
+                Born in <span className="text-purple-400 font-bold">2005</span>. My digital journey began at 14 in the depths of cybersecurity forums, where I learned that code is power and privacy is non-negotiable.
               </p>
               <p>
-                Hoy, como estudiante de la <span className="text-purple-400 font-bold">Universidad EAFIT</span> y desarrollador Full-Stack, fusiono la estética brutalista con arquitecturas robustas. Mi fe cristiana es el ancla que le da propósito a cada línea de código: crear herramientas que edifiquen y trasciendan el ruido digital.
+                Today, as a Systems Engineering student at <span className="text-purple-400 font-bold">EAFIT University</span> and Founder/CTO of <span className="text-purple-400 font-bold">Croody</span>, my natural environment has no graphical interface; it's the terminal. I build distributed systems and Artificial Intelligence architectures that respect human agency. I don't believe in vendor lock-in or relying on third-party public networks; I prioritize proprietary infrastructure, radical security, and raw performance.
+              </p>
+              <p>
+                My Christian faith is the anchor that gives purpose to every line of code: creating technology that edifies, returns sovereignty to the user, and transcends digital noise instead of exploiting it.
               </p>
             </div>
 
-            <div className="space-y-6">
-              <h3 className="font-mono text-xs tracking-[0.4em] text-purple-500/60 uppercase border-b border-purple-500/20 pb-4">Core Protocols</h3>
-              <div className="flex flex-wrap gap-3">
-                {SITE_CONFIG.pages.about.skills.map((skill, i) => (
-                  <span key={i} className="px-4 py-2 bg-purple-900/20 border border-purple-500/10 rounded-xl text-xs sm:text-sm text-purple-300 font-mono hover:bg-purple-600 hover:text-white transition-all cursor-default">
-                    {skill.split(".")[0]}
-                  </span>
-                ))}
+            <div className="space-y-6 mt-8">
+              <h3 className="font-mono text-xs tracking-[0.4em] text-purple-500/60 uppercase border-b border-purple-500/20 pb-4">The Ethos / Discipline</h3>
+              <div className="text-lg sm:text-xl font-light text-purple-100/80 leading-relaxed font-['Dosis'] text-justify bg-purple-900/10 p-6 rounded-2xl border border-purple-500/10 hover:border-purple-500/30 transition-all">
+                <p>
+                  Technical excellence doesn't come from syntax, it comes from routine. My days start at 4 A.M., combining high physical performance with engineering. I firmly believe that discipline in the physical world translates directly into cleaner, more scalable, and resilient architectures in the digital world. They say luck is handed out at 5 A.M., and I make sure to be first in line.
+                </p>
               </div>
             </div>
 
-            <motion.div 
-              whileHover={{ x: 10 }}
-              className="mt-4"
-            >
-              <a href={`mailto:${SITE_CONFIG.personal.email}`} className="group flex items-center gap-4 text-purple-400 hover:text-purple-200 transition-all font-['Bebas_Neue'] text-3xl tracking-widest">
-                ESTABLISH_CONNECTION <span>→</span>
-              </a>
-            </motion.div>
+            <div className="space-y-6 mt-8">
+              <h3 className="font-mono text-xs tracking-[0.4em] text-purple-500/60 uppercase border-b border-purple-500/20 pb-4">Core Protocols</h3>
+              <ul className="space-y-8 text-lg sm:text-xl font-light text-purple-100/80 leading-relaxed font-['Dosis'] text-justify">
+                <li className="relative pl-6 before:content-[''] before:absolute before:left-0 before:top-2 before:w-1.5 before:h-1.5 before:bg-purple-500 before:rounded-full">
+                  <strong className="text-purple-400 font-bold font-mono text-sm tracking-widest uppercase block mb-1">Systems Architecture & Backend</strong>
+                  Design of scalable ecosystems and proprietary infrastructure (Rust, Python, Node.js, Next.js).
+                </li>
+                <li className="relative pl-6 before:content-[''] before:absolute before:left-0 before:top-2 before:w-1.5 before:h-1.5 before:bg-purple-500 before:rounded-full">
+                  <strong className="text-purple-400 font-bold font-mono text-sm tracking-widest uppercase block mb-1">Operational Security (SecOps)</strong>
+                  Server hardening, Kali Linux administration, WireGuard tunnels implementation, and strict automation.
+                </li>
+                <li className="relative pl-6 before:content-[''] before:absolute before:left-0 before:top-2 before:w-1.5 before:h-1.5 before:bg-purple-500 before:rounded-full">
+                  <strong className="text-purple-400 font-bold font-mono text-sm tracking-widest uppercase block mb-1">Ethical AI & Sovereignty</strong>
+                  Development of models and natural language processing focused on empowering user independence, not generating friction.
+                </li>
+                <li className="relative pl-6 before:content-[''] before:absolute before:left-0 before:top-2 before:w-1.5 before:h-1.5 before:bg-purple-500 before:rounded-full">
+                  <strong className="text-purple-400 font-bold font-mono text-sm tracking-widest uppercase block mb-1">Full-Stack Deployment</strong>
+                  Interfaces tailored for absolute performance and accessibility, connecting complex backend logic with fluid ecosystems (Flutter, Web).
+                </li>
+              </ul>
+            </div>
+
+            {/* Espaciador final para la navbar */}
+            <div className="h-24 sm:h-32"></div>
           </motion.div>
 
         </div>

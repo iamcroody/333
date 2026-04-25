@@ -38,9 +38,12 @@ export default function Proyectos() {
   return (
     <div className="min-h-screen bg-[#05010a] text-white flex flex-col items-center pt-24 sm:pt-32 px-4 pb-32">
       <Menu333 />
-      <div className="absolute top-4 left-4 z-50 hidden md:block">
+      <motion.div 
+        initial={{ opacity: 0 }} animate={{ opacity: 0.4 }} exit={{ opacity: 0 }}
+        className="absolute top-6 left-6 z-50 hidden md:block hover:opacity-100 transition-opacity"
+      >
         <NeonName centered={false} />
-      </div>
+      </motion.div>
 
       <main className="z-10 w-full max-w-7xl mx-auto">
         <motion.header
@@ -48,9 +51,18 @@ export default function Proyectos() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-12 sm:mb-20 text-center md:text-left"
         >
-          <h1 className="text-5xl sm:text-8xl font-bold tracking-tighter mb-4 text-foreground font-['Emblema_One'] uppercase">
-            Work.
-          </h1>
+          <div className="mb-4 inline-block">
+            <a href="https://croody.org" target="_blank" rel="noopener noreferrer" className="group flex items-end gap-4">
+              <h1 className="text-5xl sm:text-8xl font-bold tracking-tighter text-foreground font-['Emblema_One'] uppercase transition-all duration-300 group-hover:drop-shadow-[0_0_15px_rgba(147,51,234,0.5)] group-hover:scale-[1.02]">
+                Work.
+              </h1>
+              <div className="mb-3 sm:mb-6 opacity-70 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-300">
+                <span className="text-purple-500 text-xl sm:text-3xl font-bold tracking-wider block" style={{ fontFamily: "'Caveat', cursive, sans-serif", transform: "rotate(-10deg)" }}>
+                  ← dale click
+                </span>
+              </div>
+            </a>
+          </div>
           <div className="flex flex-wrap justify-center md:justify-start gap-2 sm:gap-4 mt-8">
             {categories.map((cat) => (
               <button
@@ -83,8 +95,9 @@ export default function Proyectos() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.9 }}
+                  whileHover={{ y: -5 }}
                   transition={{ duration: 0.6, delay: index * 0.05, ease: [0.16, 1, 0.3, 1] }}
-                  className="group relative bg-purple-900/5 border border-purple-500/10 rounded-3xl p-6 sm:p-8 hover:bg-purple-900/10 hover:border-purple-500/30 transition-all duration-500"
+                  className="group relative bg-[#0a0512]/60 backdrop-blur-md border border-purple-500/10 rounded-3xl p-6 sm:p-8 hover:bg-purple-900/20 hover:border-purple-500/40 hover:shadow-[0_10px_40px_-10px_rgba(147,51,234,0.25)] transition-all duration-500 overflow-hidden"
                 >
                   <div className="flex justify-between items-start mb-6">
                     <span className="text-3xl sm:text-4xl filter grayscale group-hover:grayscale-0 transition-all duration-500">
@@ -115,7 +128,7 @@ export default function Proyectos() {
                   </div>
 
                   {/* Overlay sutil de luz al hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl pointer-events-none" />
                 </motion.article>
               ))}
             </AnimatePresence>

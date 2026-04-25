@@ -41,24 +41,25 @@ export default function Menu333() {
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
-        className="flex items-center justify-between bg-black/60 backdrop-blur-2xl border border-purple-500/20 p-2 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden"
+        className="flex items-center justify-between bg-[#05010a]/50 backdrop-blur-md border border-purple-500/30 p-2 rounded-3xl shadow-[0_20px_50px_rgba(147,51,234,0.15)] relative overflow-hidden"
       >
-        <div className="absolute inset-0 bg-gradient-to-t from-purple-500/5 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-purple-500/10 to-transparent pointer-events-none" />
         
         {links.map((link) => {
           const isActive = pathname === link.href;
           const content = (
             <>
-              <span className={`text-xl sm:text-2xl mb-1 transition-all duration-300 ${isActive ? "text-purple-400 text-shadow-neon scale-110" : "text-purple-200/40 group-hover:text-purple-300"}`}>
+              <span className={`text-xl sm:text-2xl mb-1 transition-all duration-300 ${isActive ? "text-purple-400 text-shadow-neon scale-110" : "text-purple-200/40 group-hover:text-purple-300 group-hover:scale-110"}`}>
                 {link.icon}
               </span>
-              <span className={`text-[8px] sm:text-[10px] font-mono tracking-widest uppercase transition-colors duration-300 ${isActive ? "text-purple-300 font-bold" : "text-purple-200/30 group-hover:text-purple-200"}`}>
+              <span className={`text-[8px] sm:text-[10px] font-mono tracking-widest uppercase transition-all duration-300 ${isActive ? "text-purple-300 font-bold" : "text-purple-200/30 group-hover:text-purple-200"}`}>
                 {link.name}
               </span>
               {isActive && (
                 <motion.div 
                   layoutId="activeTab"
-                  className="absolute bottom-0 w-8 h-1 bg-purple-500 shadow-[0_0_12px_#a855f7] rounded-full"
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  className="absolute bottom-0 w-8 h-[2px] bg-purple-400 shadow-[0_0_12px_#a855f7] rounded-full"
                 />
               )}
             </>
