@@ -28,7 +28,7 @@ jobs:
       - name: 🛠️ Build and Prepare Output
         run: |
           npm run build
-          echo "eskhe.com" > out/CNAME
+          echo "founder.croody.org" > out/CNAME
           echo "" > out/.nojekyll
 
       - name: 🚀 Deploy to GitHub Pages
