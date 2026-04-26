@@ -99,7 +99,7 @@ export default function NexusPage() {
     <div 
       ref={containerRef}
       onClick={handleTripleClick}
-      className="h-screen w-full overflow-hidden bg-[#05010a] text-white flex flex-col items-center justify-center relative"
+      className="min-h-screen w-full overflow-y-auto overflow-x-hidden bg-[#05010a] text-white flex flex-col items-center justify-center relative"
     >
       <AnimatePresence>
         {!isFullScreen && (
@@ -117,7 +117,7 @@ export default function NexusPage() {
             {/* Mode Selector */}
             <motion.div 
               initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -20, opacity: 0 }}
-              className="absolute top-12 flex justify-center gap-2 sm:gap-4 z-50"
+              className="absolute top-16 sm:top-12 flex justify-center gap-2 sm:gap-4 z-50 w-full"
             >
               {["clock", "pomo", "world"].map((tab) => (
                 <button
@@ -137,9 +137,9 @@ export default function NexusPage() {
         )}
       </AnimatePresence>
 
-      <div className={`w-full h-full flex items-center justify-center transition-all duration-700 ${isFullScreen ? 'bg-black p-0' : 'p-4 sm:p-12'}`}>
+      <div className={`w-full flex items-center justify-center transition-all duration-700 ${isFullScreen ? 'bg-black p-0 h-screen' : 'p-4 sm:p-12 pt-36 pb-24 min-h-screen'}`}>
         <div className={`
-          ${isFullScreen ? 'w-full h-full overflow-visible' : 'bg-[#05010a] border border-[#05010a] rounded-[2rem] sm:rounded-[3.5rem] p-8 sm:p-20 max-w-5xl w-full overflow-hidden'} 
+          ${isFullScreen ? 'w-full h-full overflow-visible' : 'bg-[#05010a] border border-[#05010a] rounded-[2rem] sm:rounded-[3.5rem] p-6 sm:p-20 max-w-5xl w-full'} 
           relative transition-all duration-700 flex flex-col justify-center items-center
         `}>
           <AnimatePresence mode="wait">
@@ -234,11 +234,7 @@ export default function NexusPage() {
         </div>
       </div>
 
-      {!isFullScreen && (
-        <footer className="absolute bottom-24 text-center opacity-10 font-mono text-[9px] tracking-[0.6em] uppercase pointer-events-none">
-          iamcroody-os // temporal-nexus-v3.0
-        </footer>
-      )}
+      {/* Removed footer text that overlapped clock */}
     </div>
   );
 }

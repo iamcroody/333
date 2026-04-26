@@ -4,6 +4,12 @@ import clsx from 'clsx';
 import { type Block, type Wallet, type Transaction, calculateHash, createGenesisBlock, mineBlock, isValidBlock, generateWallet, getBalances, adjustDifficulty } from './blockchain';
 import { Trash2, ShieldAlert, Plus, ArrowRightLeft, Pickaxe, Activity, BrainCircuit, Hammer, Wallet as WalletIcon, Network, ChevronDown, Check, Zap, Cpu, ShieldCheck, Fingerprint, Radio, Coins, Menu, ChevronLeft } from 'lucide-react';
 
+// --- HELPERS ---
+const shortenAddress = (address: string) => {
+    if (!address) return '';
+    return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
+};
+
 // --- COMPONENTS ---
 
 const IdentitySelector = ({ 
@@ -42,7 +48,7 @@ const IdentitySelector = ({
                     {selectedIndex + 1}
                 </div>
                 <div className="text-left flex-1 min-w-0">
-                    <div className="text-sm font-bold text-gold-100 font-tech truncate">{currentWallet.address}</div>
+                    <div className="text-sm font-bold text-gold-100 font-tech truncate">{shortenAddress(currentWallet.address)}</div>
                     <div className="text-[10px] text-gold-600 group-hover:text-gold-400 font-luxury uppercase tracking-widest">
                         {isOpen ? "Select Identity" : "Active Identity"}
                     </div>
@@ -73,7 +79,7 @@ const IdentitySelector = ({
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className={clsx("text-xs font-tech truncate", selectedIndex === idx ? "text-gold-300" : "text-neutral-400")}>
-                                            {wallet.address}
+                                            {shortenAddress(wallet.address)}
                                         </div>
                                     </div>
                                     {selectedIndex === idx && <Check size={12} className="text-gold-500"/>}
@@ -205,9 +211,9 @@ const BlockNode = ({ block, prevHash, onUpdate, onDelete, isGenesis }: {
                                     <div key={i} className="flex gap-3 border-b border-gold-900/20 pb-2 last:border-0 items-center">
                                         <span className="text-gold-500">◈</span>
                                         <div className="flex-1 truncate">
-                                            <span className="text-gold-600">{tx.from === "SYSTEM" ? "CENTRAL BANK" : tx.from.substring(0,6) + "..."}</span>
+                                            <span className="text-gold-600">{tx.from === "SYSTEM" ? "CENTRAL BANK" : shortenAddress(tx.from)}</span>
                                             <span className="text-neutral-600 mx-2 text-[8px]">➜</span>
-                                            <span className="text-gold-300">{tx.to.substring(0,6)}...</span>
+                                            <span className="text-gold-300">{shortenAddress(tx.to)}</span>
                                         </div>
                                         <span className="text-emerald-400 font-bold">{tx.amount.toFixed(2)}</span>
                                     </div>
@@ -225,7 +231,7 @@ const BlockNode = ({ block, prevHash, onUpdate, onDelete, isGenesis }: {
                         {block.miner ? (
                             <span className="flex items-center gap-1">
                                 <span className="w-2 h-2 rounded-full bg-purple-500"></span>
-                                {block.miner.substring(0, 10)}...
+                                {shortenAddress(block.miner)}
                             </span>
                         ) : "GENESIS_GHOST"}
                     </div>
@@ -278,9 +284,9 @@ const MempoolNode = ({ transactions, onMine, isMining, prevHash }: { transaction
                             <div key={i} className="flex gap-3 border-b border-gold-900/10 pb-2 last:border-0 items-center">
                                 <span className="text-gold-500/50">◈</span>
                                 <div className="flex-1 truncate opacity-70">
-                                    <span className="text-gold-600">{tx.from === "SYSTEM" ? "CENTRAL BANK" : tx.from.substring(0,6) + "..."}</span>
+                                    <span className="text-gold-600">{tx.from === "SYSTEM" ? "CENTRAL BANK" : shortenAddress(tx.from)}</span>
                                     <span className="text-neutral-600 mx-2 text-[8px]">➜</span>
-                                    <span className="text-gold-300">{tx.to.substring(0,6)}...</span>
+                                    <span className="text-gold-300">{shortenAddress(tx.to)}</span>
                                 </div>
                                 <span className="text-emerald-400/70 font-bold">{tx.amount.toFixed(2)}</span>
                             </div>
@@ -400,7 +406,7 @@ const ConsensusView = ({
                         animate={{ x: 0, opacity: 1 }}
                         exit={{ x: -320, opacity: 0 }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        className="w-80 border-r border-gold-900/20 bg-black/40 backdrop-blur p-6 flex flex-col font-tech relative"
+                        className="w-80 border-r border-gold-900/20 bg-black/40 backdrop-blur p-6 flex flex-col font-tech absolute md:relative z-50 h-full"
                     >
                         <button 
                             onClick={() => setIsLogOpen(false)}
@@ -717,38 +723,45 @@ export default function App() {
     <div className="h-screen w-screen bg-[#020202] text-gold-100 font-sans flex flex-col overflow-hidden selection:bg-gold-500/30 selection:text-white">
         
         {/* HEADER NAVIGATION */}
-        <header className="h-20 shrink-0 border-b border-gold-900/30 flex items-center justify-between px-8 bg-black/50 backdrop-blur z-50">
-            <div className="flex items-center gap-8">
-                 <div className="flex items-center gap-4">
-                    <div className="relative">
+        <header className="shrink-0 border-b border-gold-900/30 flex flex-col md:flex-row items-center justify-between px-4 md:px-8 py-4 md:py-0 md:h-20 bg-black/50 backdrop-blur z-50 gap-4 md:gap-0">
+            <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 w-full md:w-auto">
+                 <div className="flex items-center gap-3 md:gap-4">
+                    <button 
+                        onClick={() => window.location.href = '/'} 
+                        className="flex items-center justify-center w-8 h-8 rounded-full bg-black border border-gold-900/50 text-gold-500 hover:bg-gold-900/30 hover:border-gold-500 transition-all shrink-0"
+                        title="Return to Portfolio"
+                    >
+                        <ChevronLeft size={16} />
+                    </button>
+                    <div className="relative shrink-0">
                         <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-gold-600 to-gold-300 shadow-[0_0_15px_rgba(212,165,40,0.5)] flex items-center justify-center">
                             <span className="font-luxury text-black font-bold text-lg">B</span>
                         </div>
                     </div>
                     <div>
-                        <h1 className="font-luxury text-2xl tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-gold-200 via-gold-400 to-gold-200">
+                        <h1 className="font-luxury text-xl md:text-2xl tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-gold-200 via-gold-400 to-gold-200 text-center md:text-left">
                             CHAIN SIMULATOR
                         </h1>
                     </div>
                 </div>
 
-                {/* TABS UPDATED */}
-                <div className="flex bg-black/40 border border-gold-900/30 rounded-full p-1 gap-1">
+                {/* TABS UPDATED - DESKTOP ONLY */}
+                <div className="hidden md:flex bg-black/40 border border-gold-900/30 rounded-full p-1 gap-1 w-auto justify-center">
                     <button 
                         onClick={() => setCurrentView('vault')}
-                        className={clsx("flex items-center gap-2 px-6 py-2 rounded-full text-[10px] uppercase tracking-widest transition-all", currentView === 'vault' ? "bg-gold-600 text-black font-bold shadow-[0_0_15px_rgba(212,165,40,0.4)]" : "text-neutral-500 hover:text-gold-400")}
+                        className={clsx("flex items-center gap-2 px-4 md:px-6 py-2 rounded-full text-[9px] md:text-[10px] uppercase tracking-widest transition-all whitespace-nowrap", currentView === 'vault' ? "bg-gold-600 text-black font-bold shadow-[0_0_15px_rgba(212,165,40,0.4)]" : "text-neutral-500 hover:text-gold-400")}
                     >
                         <WalletIcon size={14} /> My Vault
                     </button>
                     <button 
                         onClick={() => setCurrentView('network')}
-                        className={clsx("flex items-center gap-2 px-6 py-2 rounded-full text-[10px] uppercase tracking-widest transition-all", currentView === 'network' ? "bg-gold-600 text-black font-bold shadow-[0_0_15px_rgba(212,165,40,0.4)]" : "text-neutral-500 hover:text-gold-400")}
+                        className={clsx("flex items-center gap-2 px-4 md:px-6 py-2 rounded-full text-[9px] md:text-[10px] uppercase tracking-widest transition-all whitespace-nowrap", currentView === 'network' ? "bg-gold-600 text-black font-bold shadow-[0_0_15px_rgba(212,165,40,0.4)]" : "text-neutral-500 hover:text-gold-400")}
                     >
                         <Network size={14} /> Live Network
                     </button>
                     <button 
                         onClick={() => setCurrentView('consensus')}
-                        className={clsx("flex items-center gap-2 px-6 py-2 rounded-full text-[10px] uppercase tracking-widest transition-all relative overflow-visible", currentView === 'consensus' ? "bg-gold-600 text-black font-bold shadow-[0_0_15px_rgba(212,165,40,0.4)]" : "text-neutral-500 hover:text-gold-400")}
+                        className={clsx("flex items-center gap-2 px-4 md:px-6 py-2 rounded-full text-[9px] md:text-[10px] uppercase tracking-widest transition-all relative overflow-visible whitespace-nowrap", currentView === 'consensus' ? "bg-gold-600 text-black font-bold shadow-[0_0_15px_rgba(212,165,40,0.4)]" : "text-neutral-500 hover:text-gold-400")}
                     >
                         <Zap size={14} /> Consensus
                         {pendingBlock && <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-ping shadow-[0_0_10px_rgba(239,68,68,0.8)]"></span>}
@@ -756,7 +769,7 @@ export default function App() {
                 </div>
             </div>
 
-            <div className="flex gap-8 text-[10px] uppercase tracking-widest text-gold-600/60 font-tech">
+            <div className="flex gap-8 text-[10px] uppercase tracking-widest text-gold-600/60 font-tech w-full md:w-auto justify-center md:justify-end">
                 <div className="flex items-center gap-2">
                     <Activity size={14} className={isMining ? "text-green-500 animate-pulse" : "text-neutral-700"}/> 
                     {isMining ? `Mining @ ${hashRate} H/s` : "Network Idle"}
@@ -774,8 +787,8 @@ export default function App() {
 
             {/* --- VIEW 1: VAULT --- */}
             {currentView === 'vault' && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex-1 z-10 flex items-center justify-center p-12">
-                    <div className="w-[800px] bg-black/80 backdrop-blur border border-gold-900/30 p-8 rounded-lg shadow-2xl relative overflow-hidden">
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex-1 z-10 flex items-center justify-center p-4 sm:p-12 w-full">
+                    <div className="w-full max-w-[800px] bg-black/80 backdrop-blur border border-gold-900/30 p-6 sm:p-8 rounded-lg shadow-2xl relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-gold-500/5 blur-3xl rounded-full pointer-events-none"></div>
                         <div className="mb-10 text-center relative z-20">
                             <label className="text-[10px] uppercase tracking-[0.3em] text-gold-500/50 mb-4 block">Current Identity</label>
@@ -787,7 +800,7 @@ export default function App() {
                              </div>
                              <div className="text-[10px] uppercase tracking-[0.2em] text-gold-700">Available Balance</div>
                         </div>
-                        <div className="grid grid-cols-2 gap-8 relative z-10">
+                        <div className="flex flex-col sm:grid sm:grid-cols-2 gap-6 sm:gap-8 relative z-10">
                              <div className="space-y-2">
                                 <label className="text-[10px] uppercase tracking-[0.2em] text-gold-600 font-bold flex items-center gap-2 h-4">
                                     <ArrowRightLeft size={12}/> Recipient
@@ -800,7 +813,7 @@ export default function App() {
                                     >
                                         <option value="" disabled>Select a beneficiary...</option>
                                         {wallets.filter(w => w.address !== currentWallet.address).map((w) => (
-                                            <option key={w.address} value={w.address}>User #{wallets.indexOf(w) + 1} ({w.address.substring(0, 12)}...)</option>
+                                            <option key={w.address} value={w.address}>User #{wallets.indexOf(w) + 1} ({shortenAddress(w.address)})</option>
                                         ))}
                                     </select>
                                     <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-gold-700 pointer-events-none" />
@@ -832,7 +845,7 @@ export default function App() {
                                 animate={{ x: 0, opacity: 1 }}
                                 exit={{ x: -300, opacity: 0 }}
                                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                className="w-72 shrink-0 bg-black/80 border-r border-gold-900/20 flex flex-col z-40 h-full backdrop-blur-sm shadow-2xl relative"
+                                className="w-72 shrink-0 bg-black/80 border-r border-gold-900/20 flex flex-col z-50 h-full backdrop-blur-md shadow-2xl absolute md:relative left-0 top-0"
                             >
                                 <button 
                                     onClick={() => setIsSidebarOpen(false)}
@@ -849,7 +862,7 @@ export default function App() {
                                                     <span className={clsx("font-bold text-xs", i===0 ? "text-gold-400" : "text-neutral-500")}>
                                                         {i===0 && "👑 "} {wallets.find(w => w.address === addr) ? `User #${wallets.findIndex(w => w.address === addr)+1}` : "Unknown"}
                                                     </span>
-                                                    <span className="text-[8px] text-neutral-600">{addr.substring(0, 8)}...</span>
+                                                    <span className="text-[8px] text-neutral-600">{shortenAddress(addr)}</span>
                                                 </div>
                                                 <span className={clsx("font-bold", bal > 0 ? "text-emerald-400" : "text-neutral-600")}>{bal.toFixed(0)}</span>
                                             </div>
@@ -887,7 +900,7 @@ export default function App() {
                             </motion.button>
                         )}
                     </AnimatePresence>
-                    <div ref={scrollRef} className="flex-1 overflow-x-auto overflow-y-hidden flex items-center p-16 gap-0 h-full w-full scrollbar-thin scrollbar-thumb-gold-900/50 scrollbar-track-black z-10">
+                    <div ref={scrollRef} className="flex-1 overflow-x-auto overflow-y-hidden flex items-center p-4 sm:p-16 gap-0 h-full w-full scrollbar-thin scrollbar-thumb-gold-900/50 scrollbar-track-black z-10">
                         <AnimatePresence>
                             {chain.map((block, i) => {
                                 const prevHash = i > 0 ? chain[i-1].hash : "0".repeat(64);
@@ -920,6 +933,36 @@ export default function App() {
             {currentView === 'consensus' && (
                 <ConsensusView pendingBlock={pendingBlock} onFinalize={finalizeConsensus} />
             )}
+        </div>
+
+        {/* MOBILE BOTTOM NAVIGATION */}
+        <div className="md:hidden fixed bottom-0 left-0 right-0 z-[100] bg-black/90 backdrop-blur-lg border-t border-gold-900/30 pb-safe">
+            <div className="flex justify-around items-center p-2">
+                <button 
+                    onClick={() => setCurrentView('vault')}
+                    className={clsx("flex flex-col items-center gap-1 p-2 flex-1 rounded-lg transition-colors", currentView === 'vault' ? "text-gold-500 bg-gold-900/10" : "text-neutral-500 hover:text-gold-400")}
+                >
+                    <WalletIcon size={20} />
+                    <span className="text-[9px] uppercase tracking-wider font-bold">Vault</span>
+                </button>
+                <button 
+                    onClick={() => setCurrentView('network')}
+                    className={clsx("flex flex-col items-center gap-1 p-2 flex-1 rounded-lg transition-colors", currentView === 'network' ? "text-gold-500 bg-gold-900/10" : "text-neutral-500 hover:text-gold-400")}
+                >
+                    <Network size={20} />
+                    <span className="text-[9px] uppercase tracking-wider font-bold">Network</span>
+                </button>
+                <button 
+                    onClick={() => setCurrentView('consensus')}
+                    className={clsx("flex flex-col items-center gap-1 p-2 flex-1 rounded-lg transition-colors relative", currentView === 'consensus' ? "text-gold-500 bg-gold-900/10" : "text-neutral-500 hover:text-gold-400")}
+                >
+                    <div className="relative">
+                        <Zap size={20} />
+                        {pendingBlock && <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-ping"></span>}
+                    </div>
+                    <span className="text-[9px] uppercase tracking-wider font-bold">Consensus</span>
+                </button>
+            </div>
         </div>
     </div>
   );

@@ -34,7 +34,7 @@ export default function SobreMi() {
           >
             <div className="relative group">
               <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-[2rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-              <div className="relative aspect-[4/5] bg-purple-900/20 rounded-[2rem] border border-purple-500/20 overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
+              <div tabIndex={0} className="relative aspect-[4/5] bg-purple-900/20 rounded-[2rem] border border-purple-500/20 overflow-hidden grayscale hover:grayscale-0 focus:grayscale-0 active:grayscale-0 transition-all duration-700 cursor-pointer">
                 <img 
                   src="/textures/sobre-mi.jpg" 
                   alt="Jose Jimenez" 
@@ -59,7 +59,7 @@ export default function SobreMi() {
               ))}
             </div>
 
-            <div className="mt-8 flex flex-col gap-6">
+            <div className="mt-8 hidden lg:flex flex-col gap-6">
               <motion.div whileHover={{ x: 10 }}>
                 <a href="https://instagram.com/iamcroody" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 text-purple-400 hover:text-purple-200 transition-all font-['Bebas_Neue'] text-3xl tracking-widest">
                   INSTAGRAM_FEED <span>→</span>
@@ -129,6 +129,21 @@ export default function SobreMi() {
                   Interfaces tailored for absolute performance and accessibility, connecting complex backend logic with fluid ecosystems (Flutter, Web).
                 </li>
               </ul>
+            </div>
+
+            {/* Contactos Mobile */}
+            <div className="mt-12 flex lg:hidden flex-col gap-6 border-t border-purple-500/20 pt-8">
+              <motion.div whileHover={{ x: 10 }}>
+                <a href="https://instagram.com/iamcroody" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 text-purple-400 hover:text-purple-200 transition-all font-['Bebas_Neue'] text-3xl tracking-widest">
+                  INSTAGRAM_FEED <span>→</span>
+                </a>
+              </motion.div>
+
+              <motion.div whileHover={{ x: 10 }}>
+                <a href="https://co.linkedin.com/in/josealejandrojimenez" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 text-purple-400 hover:text-purple-200 transition-all font-['Bebas_Neue'] text-3xl tracking-widest">
+                  LINKEDIN_NETWORK <span>→</span>
+                </a>
+              </motion.div>
             </div>
 
             {/* Espaciador final para la navbar */}

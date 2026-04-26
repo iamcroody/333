@@ -25,9 +25,11 @@ export default function Home() {
         >
           <motion.h2 
             whileHover={{ scale: 1.02, backgroundColor: "rgba(88, 28, 135, 0.25)" }}
-            className="font-mono text-purple-200/90 text-xs md:text-sm tracking-[0.5em] uppercase font-light border border-purple-500/30 py-4 px-10 bg-purple-900/10 backdrop-blur-md rounded-full shadow-[0_0_15px_rgba(147,51,234,0.15)] transition-colors cursor-default"
+            className="font-mono text-purple-200/90 text-xs md:text-sm tracking-[0.5em] uppercase font-light border border-purple-500/30 py-4 px-10 bg-purple-900/10 backdrop-blur-md rounded-2xl md:rounded-full shadow-[0_0_15px_rgba(147,51,234,0.15)] transition-colors cursor-default flex flex-col md:flex-row items-center justify-center gap-2 md:gap-0"
           >
-            Software Architect <span className="text-purple-400 mx-3 animate-pulse">×</span> Digital Artisan
+            <span>Software Architect</span>
+            <span className="text-purple-400 md:mx-3 animate-pulse">×</span>
+            <span>Digital Artisan</span>
           </motion.h2>
         </motion.div>
       </main>
