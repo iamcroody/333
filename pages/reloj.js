@@ -5,7 +5,7 @@ import NeonName from "../components/NeonName";
 import { motion, AnimatePresence } from "framer-motion";
 import { Howl } from "howler";
 
-const alarmSound = typeof window !== "undefined" ? new Howl({ src: ["/alarma.mp3"], volume: 0.5 }) : null;
+const alarmSound = typeof window !== "undefined" ? new Howl({ src: ["/alarma.mp3"], volume: 1.0 }) : null;
 
 export default function NexusPage() {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -61,6 +61,10 @@ export default function NexusPage() {
   const [pomoTime, setPomoTime] = useState(25 * 60);
   const [pomoRunning, setPomoRunning] = useState(false);
   const [pomoMode, setPomoMode] = useState("work");
+  const [customTime, setCustomTime] = useState(15 * 60);
+  const [isEditingTime, setIsEditingTime] = useState(false);
+  const [editValue, setEditValue] = useState("");
+  const [isAlarmPlaying, setIsAlarmPlaying] = useState(false);
 
   // World Clocks
   const worldClocks = [
@@ -80,8 +84,9 @@ export default function NexusPage() {
     let interval = null;
     if (pomoRunning && pomoTime > 0) {
       interval = setInterval(() => setPomoTime((t) => t - 1), 1000);
-    } else if (pomoTime === 0) {
+    } else if (pomoTime === 0 && pomoRunning) {
       alarmSound?.play();
+      setIsAlarmPlaying(true);
       setPomoRunning(false);
     }
     return () => clearInterval(interval);
@@ -102,37 +107,50 @@ export default function NexusPage() {
       className="min-h-screen w-full overflow-y-auto overflow-x-hidden bg-[#05010a] text-white flex flex-col items-center justify-center relative"
     >
       <AnimatePresence>
+        {pomoRunning && pomoTime > 0 && pomoTime <= 5 && (
+          <motion.div
+            key={pomoTime}
+            initial={{ opacity: (6 - pomoTime) * 0.15 }}
+            animate={{ opacity: 0 }}
+            transition={{ duration: 0.8 }}
+            className="pointer-events-none fixed inset-0 bg-white z-[999]"
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
         {!isFullScreen && (
           <>
             <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 20, opacity: 0 }}>
               <Menu333 />
             </motion.div>
-            <motion.div 
-              initial={{ opacity: 0 }} animate={{ opacity: 0.4 }} exit={{ opacity: 0 }}
-              className="absolute top-6 left-6 z-50 hidden md:block hover:opacity-100 transition-opacity"
-            >
-              <NeonName centered={false} />
-            </motion.div>
+            <div className="absolute top-0 left-0 w-full flex flex-col items-center gap-4 pt-6 z-50">
+              <motion.div 
+                initial={{ opacity: 0 }} animate={{ opacity: 0.6 }} exit={{ opacity: 0 }}
+                className="hover:opacity-100 transition-opacity"
+              >
+                <NeonName centered={false} />
+              </motion.div>
 
-            {/* Mode Selector */}
-            <motion.div 
-              initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -20, opacity: 0 }}
-              className="absolute top-16 sm:top-12 flex justify-center gap-2 sm:gap-4 z-50 w-full"
-            >
-              {["clock", "pomo", "world"].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`px-4 sm:px-6 py-2 rounded-full font-mono text-[10px] tracking-widest transition-all ${
-                    activeTab === tab 
-                      ? "bg-purple-600/20 text-purple-300 border border-purple-500/40"
-                      : "text-purple-500/30 hover:text-purple-400 border border-transparent"
-                  }`}
-                >
-                  {tab.toUpperCase()}
-                </button>
-              ))}
-            </motion.div>
+              {/* Mode Selector */}
+              <motion.div 
+                initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -20, opacity: 0 }}
+                className="flex justify-center gap-2 sm:gap-4 w-full"
+              >
+                {["clock", "pomo", "world"].map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`px-4 sm:px-6 py-2 rounded-full font-mono text-[10px] tracking-widest transition-all ${
+                      activeTab === tab 
+                        ? "bg-purple-600/20 text-purple-300 border border-purple-500/40"
+                        : "text-purple-500/30 hover:text-purple-400 border border-transparent"
+                    }`}
+                  >
+                    {tab.toUpperCase()}
+                  </button>
+                ))}
+              </motion.div>
+            </div>
           </>
         )}
       </AnimatePresence>
@@ -172,13 +190,22 @@ export default function NexusPage() {
               >
                 {!isFullScreen && (
                   <div className="flex justify-center gap-4 mb-8">
-                    {["work", "break"].map((m) => (
+                    {["work", "break", "custom"].map((m) => (
                       <button 
                         key={m}
                         onClick={() => {
-                          setPomoMode(m);
-                          setPomoTime(m === "work" ? 25*60 : 5*60);
-                          setPomoRunning(false);
+                          alarmSound?.stop();
+                          setIsAlarmPlaying(false);
+                          if (m === "custom") {
+                            setPomoMode("custom");
+                            setIsEditingTime(true);
+                            setEditValue("");
+                            setPomoRunning(false);
+                          } else {
+                            setPomoMode(m);
+                            setPomoTime(m === "work" ? 25*60 : 5*60);
+                            setPomoRunning(false);
+                          }
                         }}
                         className={`px-4 py-1 rounded-full text-[10px] font-mono tracking-tighter transition-all ${pomoMode === m ? "bg-purple-600 text-white" : "text-purple-400/40 border border-purple-500/20"}`}
                       >
@@ -187,18 +214,73 @@ export default function NexusPage() {
                     ))}
                   </div>
                 )}
-                <h2 className={`font-['Bebas_Neue'] text-purple-100 leading-none mb-12 transition-all duration-700 ${isFullScreen ? 'text-[20vw]' : 'text-8xl sm:text-[12rem]'}`}>
-                  {formatPomo(pomoTime)}
-                </h2>
+                <div className="relative inline-block w-full">
+                  {isEditingTime && (
+                    <input
+                      autoFocus
+                      type="tel"
+                      value={editValue}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\D/g, '').slice(-4);
+                        setEditValue(val);
+                      }}
+                      onBlur={() => {
+                        setIsEditingTime(false);
+                        const padded = editValue.padStart(4, '0');
+                        const m = parseInt(padded.slice(0, 2), 10);
+                        const s = parseInt(padded.slice(2, 4), 10);
+                        const totalSecs = m * 60 + s;
+                        if (editValue !== "" && totalSecs >= 0) {
+                          setCustomTime(totalSecs);
+                          setPomoMode("custom");
+                          setPomoTime(totalSecs);
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') e.target.blur();
+                      }}
+                      className="absolute inset-0 opacity-0 cursor-text w-full h-full z-10"
+                    />
+                  )}
+                  <h2 
+                    onClick={() => {
+                      if (!pomoRunning && !isEditingTime) {
+                        setIsEditingTime(true);
+                        setEditValue("");
+                      }
+                    }}
+                    title="Click para editar"
+                    className={`font-['Bebas_Neue'] leading-none mb-12 transition-all duration-700 ${isFullScreen ? 'text-[20vw]' : 'text-8xl sm:text-[12rem]'} ${isEditingTime ? 'text-purple-300' : 'text-purple-100 cursor-pointer'}`}
+                  >
+                    {isEditingTime ? (
+                      `${editValue.padStart(4, '0').slice(0, 2)}:${editValue.padStart(4, '0').slice(2, 4)}`
+                    ) : (
+                      formatPomo(pomoTime)
+                    )}
+                  </h2>
+                </div>
                 <div className={`flex justify-center gap-4 sm:gap-8 w-full mx-auto ${isFullScreen ? 'max-w-6xl' : 'max-w-md'}`}>
                   <button 
-                    onClick={() => setPomoRunning(!pomoRunning)}
+                    onClick={() => {
+                      if (isAlarmPlaying) {
+                        alarmSound?.stop();
+                        setIsAlarmPlaying(false);
+                        setPomoTime(pomoMode === "work" ? 25*60 : pomoMode === "break" ? 5*60 : customTime);
+                      } else {
+                        setPomoRunning(!pomoRunning);
+                      }
+                    }}
                     className={`flex-1 bg-purple-600 hover:bg-purple-500 text-white rounded-2xl font-['Bebas_Neue'] transition-all shadow-lg ${isFullScreen ? 'py-10 text-7xl' : 'py-4 text-2xl'}`}
                   >
-                    {pomoRunning ? "PAUSE" : "START"}
+                    {isAlarmPlaying ? "STOP" : (pomoRunning ? "STOP" : "START")}
                   </button>
                   <button 
-                    onClick={() => { setPomoTime(pomoMode === "work" ? 25*60 : 5*60); setPomoRunning(false); }}
+                    onClick={() => { 
+                      alarmSound?.stop();
+                      setIsAlarmPlaying(false);
+                      setPomoTime(pomoMode === "work" ? 25*60 : pomoMode === "break" ? 5*60 : customTime); 
+                      setPomoRunning(false); 
+                    }}
                     className={`flex-1 border border-purple-500/20 hover:bg-purple-500/10 rounded-2xl font-['Bebas_Neue'] transition-all ${isFullScreen ? 'py-10 text-7xl' : 'py-4 text-2xl'}`}
                   >
                     RESET
